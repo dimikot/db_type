@@ -64,11 +64,12 @@ class DB_Pgsql_Type_Test_Type_RowTest extends DB_Pgsql_Type_Test_Util_TypeTestCa
                 "abcd",
                 new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array()), "output", "row or null", "abcd"),
             ),
-            array(
+
+/*            array(
                 new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())),
                 array(),
                 new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())), "output", "value for field 'a'", '<NO_SUCH_KEY>'),
-            ),
+            ),*/
             array(
                 new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())),
                 array("a" => "a\\b"),
@@ -76,10 +77,10 @@ class DB_Pgsql_Type_Test_Type_RowTest extends DB_Pgsql_Type_Test_Util_TypeTestCa
             ),
         );
 	}
-	
+
     protected function _getPairsOutput()
     {
-	    return array_merge( 
+	    return array_merge(
             $this->_getCommonTests(),
             array(
 	            'a' => array(

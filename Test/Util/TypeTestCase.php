@@ -5,7 +5,7 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
 	/**
 	 * Return test pairs in form of:
 	 * array($type, $input, $expectedOutput)
-	 * 
+	 *
 	 * @return array
 	 */
     protected function _getPairsInput()
@@ -16,14 +16,14 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
     /**
      * Return test pairs in form of:
      * array($type, $expectedInput, $output)
-     * 
+     *
      * @return array
      */
     abstract protected function _getPairsOutput();
-	
+
     /**
      * Test input method.
-     * 
+     *
      * @return void
      */
     public function testInput()
@@ -37,8 +37,10 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
                     $pair[0]->input($pair[2]);
                 } catch (Exception $e) {
                     $this->assertEquals($pair[1]->getMessage(), $e->getMessage(), "pair #$i: {$pair[2]}");
+                    continue;
                 }
-                $this->assertEquals(1, 1);
+                $this->fail("pair #$i: Expected exception: " . get_class($pair[1]) . ':' . $pair[1]->getMessage());
+
             } else {
                 $this->assertSame(
                     $pair[1],
@@ -49,10 +51,10 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
         }
         $this->assertEquals(1, 1);
     }
-	
+
     /**
      * Test output method.
-     * 
+     *
      * @return void
      */
     public function testOutput()
@@ -66,8 +68,10 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
                     $pair[0]->output($pair[1]);
                 } catch (Exception $e) {
                 	$this->assertEquals($pair[2]->getMessage(), $e->getMessage(), "pair #$i: {$pair[2]}");
+                    continue;
                 }
-                $this->assertEquals(1, 1);
+                $this->fail("pair #$i: Expected exception: " . get_class($pair[2]) . ':' . $pair[2]->getMessage());
+
         	} else {
 	            $this->assertSame(
 	                $pair[2],
@@ -76,9 +80,8 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
 	            );
         	}
         }
-        $this->assertEquals(1, 1);
     }
-    
+
     public function testOutputInputOutput()
     {
         foreach ($this->_getPairsOutput() as $i => $pair) {
@@ -92,7 +95,7 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
             );
         }
     }
-    
+
     public function testInputOutputInput()
     {
         foreach ($this->_getPairsInput() as $i => $pair) {

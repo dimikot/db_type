@@ -1,5 +1,5 @@
 <?php
-class DB_Pgsql_Type_Int extends DB_Pgsql_Type_Numeric 
+class DB_Pgsql_Type_Int extends DB_Pgsql_Type_Numeric
 {
 	public function output($value)
 	{
@@ -10,14 +10,14 @@ class DB_Pgsql_Type_Int extends DB_Pgsql_Type_Numeric
 			throw new DB_Pgsql_Type_Exception_Int($this, $value);
 		}
 		if (
-            intval($value) === intval('999999999999999999999999999999999999999999999')
-            || intval($value) === intval('-999999999999999999999999999999999999999999999')
+            intval($value) > 2147483647 || intval($value) < -2147483648 // 64 bits systems..
+            || floatval($value) > 2147483647 || floatval($value) < -2147483648
 		) {
             throw new DB_Pgsql_Type_Exception_Int($this, $value);
 		}
 		return $value;
 	}
-	
+
 	public function input($value)
 	{
 		return $value;

@@ -7,6 +7,7 @@ class DB_Pgsql_Type_Row extends DB_Pgsql_Type_Abstract_Container
 	public function __construct(array $items)
 	{
 		$this->_items = $items;
+		$this->_init();
 	}
 
     public function output($value)
@@ -14,10 +15,17 @@ class DB_Pgsql_Type_Row extends DB_Pgsql_Type_Abstract_Container
         if ($value === null) {
             return null;
         }
+
+        if (is_object($value)) {
+            $value = (array) $value;
+        }
+
         if (!is_array($value)) {
             throw new DB_Pgsql_Type_Exception_Common($this, "output", "row or null", $value);
         }
+
         $parts = array();
+
         foreach ($this->_items as $field => $type) {
             $v = $type->output(isset($value[$field]) ? $value[$field] : null);
             if ($v === null) {
@@ -75,14 +83,14 @@ class DB_Pgsql_Type_Row extends DB_Pgsql_Type_Abstract_Container
             } else if ($c != '"') {
                 // Unquoted string. NULL here is treated as "NULL" string, but NOT as a null value!
                	$len = strcspn($str, ",)", $p);
-	           	$v = self::substr($str, $p, $len);
+	           	$v = call_user_func(self::$_substr, $str, $p, $len);
                 $result[$field] = $type->input($v);
 	           	$p += $len;
 	        } else if (preg_match('/" ((?' . '>[^"]+|"")*) "/Asx', $str, $m, 0, $p)) {
                 // Quoted string.
                	$v = str_replace(array('""', '\\\\'), array('"', '\\'), $m[1]);
                	$result[$field] = $type->input($v);
-	            $p += self::strlen($m[0]);
+	            $p += call_user_func(self::$_strlen, $m[0]);
 	        } else {
                 // Error.
                 throw new DB_Pgsql_Type_Exception_Common($this, "input", "balanced quoted or unquoted string", $str, $p);

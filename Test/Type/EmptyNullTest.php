@@ -6,6 +6,13 @@ class DB_Pgsql_Type_Test_Type_EmptyNullTest extends DB_Pgsql_Type_Test_Util_Type
         return array(
             array(
                 new DB_Pgsql_Type_EmptyNull(
+                    new DB_Pgsql_Type_String()
+                ),
+                "",
+                null,
+            ),
+            array(
+                new DB_Pgsql_Type_EmptyNull(
                     new DB_Pgsql_Type_Time()
                 ),
                 "",

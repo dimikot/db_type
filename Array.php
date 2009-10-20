@@ -65,7 +65,7 @@ class DB_Pgsql_Type_Array extends DB_Pgsql_Type_Abstract_Container
             // Unquoted string.
             if ($c != '"') {
             	$len = strcspn($str, ",}", $p);
-            	$v = stripcslashes(self::substr($str, $p, $len));
+            	$v = stripcslashes(call_user_func(self::$_substr, $str, $p, $len));
             	if (!strcasecmp($v, "null")) {
             		$result[] = null;
             	} else {
@@ -79,7 +79,7 @@ class DB_Pgsql_Type_Array extends DB_Pgsql_Type_Abstract_Container
             $m = null;
             if (preg_match('/" ((?' . '>[^"\\\\]+|\\\\.)*) "/Asx', $str, $m, 0, $p)) {
                 $result[] = $this->_item->input(stripcslashes($m[1]));
-                $p += self::strlen($m[0]);
+                $p += call_user_func(self::$_strlen, $m[0]);
                 continue;
             }
             
