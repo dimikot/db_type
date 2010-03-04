@@ -1,6 +1,17 @@
 <?php
 class DB_Pgsql_Type_Test_Type_RowTest extends DB_Pgsql_Type_Test_Util_TypeTestCase
 {
+
+
+    /**
+     *
+     * @expectedException DB_Pgsql_Type_Exception_Common
+     */
+    public function testEmptyArray()
+    {
+        new DB_Pgsql_Type_Row(array());
+    }
+
 	private function _getCommonTests()
 	{
         return array(
@@ -60,9 +71,9 @@ class DB_Pgsql_Type_Test_Type_RowTest extends DB_Pgsql_Type_Test_Util_TypeTestCa
                 null,
             ),
             array(
-                new DB_Pgsql_Type_Row(array()),
+                new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())),
                 "abcd",
-                new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array()), "output", "row or null", "abcd"),
+                new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())), "output", "row or null", "abcd"),
             ),
 
 /*            array(
@@ -74,6 +85,16 @@ class DB_Pgsql_Type_Test_Type_RowTest extends DB_Pgsql_Type_Test_Util_TypeTestCa
                 new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())),
                 array("a" => "a\\b"),
                 '("a\\\\b")',
+            ),
+            "gigi" => array(
+                new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())),
+                array("a" => null),
+                '()',
+            ),
+            "error" => array(
+                new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String(), "b" => new DB_Pgsql_Type_String())),
+                '()',
+                new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())), "output", "row or null", "()"),
             ),
         );
 	}
@@ -91,6 +112,14 @@ class DB_Pgsql_Type_Test_Type_RowTest extends DB_Pgsql_Type_Test_Util_TypeTestCa
 	                array('b'=>null, 'a'=>""),
 	                '(,)',
 	            ),
+	            array(
+                    new DB_Pgsql_Type_Row(array(
+                        'b' => new DB_Pgsql_Type_String(),
+                        'a' => new DB_Pgsql_Type_String(),
+                    ), true),
+                    null,
+                    '(,)',
+                ),
 	        )
         );
     }
@@ -105,16 +134,6 @@ class DB_Pgsql_Type_Test_Type_RowTest extends DB_Pgsql_Type_Test_Util_TypeTestCa
 	                new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())), "input", "start of a row '('", 'xxx'),
                     'xxx',
 	            ),
-                array(
-                    new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())),
-                    new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())), "input", "field 'a' value", '()', 1),
-                    '()',
-                ),
-                array(
-                    new DB_Pgsql_Type_Row(array()),
-                    array(),
-                    '()',
-                ),
                 array(
                     new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())),
                     new DB_Pgsql_Type_Exception_Common(new DB_Pgsql_Type_Row(array("a" => new DB_Pgsql_Type_String())), "input", "end of the row: no more fields left", '("aa", "bb")', 7),

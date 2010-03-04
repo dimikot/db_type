@@ -4,15 +4,29 @@ class DB_Pgsql_Type_Row extends DB_Pgsql_Type_Abstract_Container
 {
 	private $_items;
 
-	public function __construct(array $items)
+	private $_notNull = false;
+
+	public function __construct(array $items, $notNull = false)
 	{
-		$this->_items = $items;
+	    if (count($items) == 0) {
+	        throw new DB_Pgsql_Type_Exception_Common($this, "__construct", "array must have more than zero items", $items);
+	    }
+
+	    $this->_items = $items;
+
+	    $this->_notNull = $notNull;
+
 		$this->_init();
+	}
+
+	public function getItems()
+	{
+	    return $this->_items;
 	}
 
     public function output($value)
     {
-        if ($value === null) {
+        if ($value === null && !$this->_notNull) {
             return null;
         }
 
@@ -20,7 +34,7 @@ class DB_Pgsql_Type_Row extends DB_Pgsql_Type_Abstract_Container
             $value = (array) $value;
         }
 
-        if (!is_array($value)) {
+        if (!is_array($value) && $value !== null) {
             throw new DB_Pgsql_Type_Exception_Common($this, "output", "row or null", $value);
         }
 
@@ -55,8 +69,13 @@ class DB_Pgsql_Type_Row extends DB_Pgsql_Type_Abstract_Container
         // Check for immediate trailing ')'.
         $c = $this->_charAfterSpaces($str, $p);
         if ($c == ')') {
-        	if (list ($field,) = each($this->_items)) {
+            list ($field,) = each($this->_items);
+            if (count($this->_items) > 1) {
+                // '()' literal for ROW(a,b) is bogus.
                 throw new DB_Pgsql_Type_Exception_Common($this, "input", "field '$field' value", $str, $p);
+            } else {
+                // '()' literal for ROW(a) is acceptable.
+                $result[$field] = null;
             }
             $p++;
             return $result;

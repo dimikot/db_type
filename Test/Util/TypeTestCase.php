@@ -21,36 +21,7 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
      */
     abstract protected function _getPairsOutput();
 
-    /**
-     * Test input method.
-     *
-     * @return void
-     */
-    public function testInput()
-    {
-        foreach ($this->_getPairsInput() as $i => $pair) {
-            if ($pair[2] instanceof Exception) {
-                continue;
-            }
-            if ($pair[1] instanceof Exception) {
-                try {
-                    $pair[0]->input($pair[2]);
-                } catch (Exception $e) {
-                    $this->assertEquals($pair[1]->getMessage(), $e->getMessage(), "pair #$i: {$pair[2]}");
-                    continue;
-                }
-                $this->fail("pair #$i: Expected exception: " . get_class($pair[1]) . ':' . $pair[1]->getMessage());
 
-            } else {
-                $this->assertSame(
-                    $pair[1],
-                    $pair[0]->input($pair[2]),
-                    "pair #$i: {$pair[2]}"
-                );
-            }
-        }
-        $this->assertEquals(1, 1);
-    }
 
     /**
      * Test output method.
@@ -67,6 +38,9 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
                 try {
                     $pair[0]->output($pair[1]);
                 } catch (Exception $e) {
+                    if (!$pair[2] instanceof Exception) {
+                        $this->fail("Value of $i's test [2] expected to be Exception, " . var_export($pair[2], 1) . "given");
+                    }
                 	$this->assertEquals($pair[2]->getMessage(), $e->getMessage(), "pair #$i: {$pair[2]}");
                     continue;
                 }
@@ -80,6 +54,40 @@ abstract class DB_Pgsql_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_Te
 	            );
         	}
         }
+    }
+
+    /**
+     * Test input method.
+     *
+     * @return void
+     */
+    public function testInput()
+    {
+        foreach ($this->_getPairsInput() as $i => $pair) {
+            if ($pair[2] instanceof Exception) {
+                continue;
+            }
+            if ($pair[1] instanceof Exception) {
+                try {
+                    $pair[0]->input($pair[2]);
+                } catch (Exception $e) {
+                    if (!$pair[1] instanceof Exception) {
+                        $this->fail("Value of $i's test [1] expected to be Exception, " . var_export($pair[1], 1) . "given");
+                    }
+                    $this->assertEquals($pair[1]->getMessage(), $e->getMessage(), "pair #$i: {$pair[2]}");
+                    continue;
+                }
+                $this->fail("pair #$i: Expected exception: " . get_class($pair[1]) . ':' . $pair[1]->getMessage());
+
+            } else {
+                $this->assertSame(
+                    $pair[1],
+                    $pair[0]->input($pair[2]),
+                    "pair #$i: {$pair[2]}"
+                );
+            }
+        }
+        $this->assertEquals(1, 1);
     }
 
     public function testOutputInputOutput()
