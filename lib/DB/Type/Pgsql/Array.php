@@ -33,14 +33,30 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
             throw new DB_Type_Exception_Common($this, "input", "'{'", $str, $p);
         }
         $p++;
-        
+
+        // SPEEDUP: in most cases array contains numeric values, so handle this
+        // situation separately - it is much faster than universal direct iteration.
+        if ($this->_item instanceof DB_Type_Numeric && !$this->_item->skipArrayParseOptimization()) {
+            $e = strpos($str, '}', $p);
+            if ($e === false) {
+                throw new DB_Type_Exception_Common($this, "input", "balanced quoted or unquoted string or sub-array", $str, $p);
+            }
+            $inner = substr($str, $p, $e - $p);
+            $p = $e + 1;
+            if (!preg_match_all('/([\d.]+|null)/is', $inner, $m)) return array();
+            foreach ($m[0] as $v) {
+                $result[] = ctype_alpha($v)? null : $v;
+            }
+            return $result;
+        }
+
         // Array may contain:
         // - "-quoted strings
         // - unquoted strings (before first "," or "}")
         // - sub-arrays
         while (1) {
             $c = $this->_charAfterSpaces($str, $p);
-            
+
             // End of array.
             if ($c == '}') {
                 $p++;
@@ -63,7 +79,7 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
             }
             
             // Unquoted string.
-            if ($c != '"') {
+            if ($c !== '"' && $c !== false) {
             	$len = strcspn($str, ",}", $p);
             	$v = stripcslashes(call_user_func(self::$_substr, $str, $p, $len));
             	if (!strcasecmp($v, "null")) {
@@ -86,7 +102,7 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
             // Error.
             throw new DB_Type_Exception_Common($this, "input", "balanced quoted or unquoted string or sub-array", $str, $p);
         }
-        
+
         return $result;
     }
     

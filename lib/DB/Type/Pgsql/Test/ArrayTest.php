@@ -53,7 +53,37 @@ class DB_Type_Pgsql_Test_ArrayTest extends DB_Type_Test_Util_TypeTestCase
                     '{aaa} bbb',
                     "VARCHAR[]",
                 ),
-	        ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_Numeric()),
+                    array("1", "2", null, "4"),
+                    '{"1",  "2"  ,  NuLL,  "4",,,   }',
+                    "BIGINT[]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_Numeric(null, null, true)),
+                    array("1", "2", null, "4"),
+                    '{"1",  "2"  ,  NuLL,  "4",,,   }',
+                    "BIGINT[]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_Numeric()),
+                    array(),
+                    '{}',
+                    "BIGINT[]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_Numeric(null, null, true)),
+                    new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "balanced quoted or unquoted string or sub-array", '{', 1),
+                    '{',
+                    "BIGINT[]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_Numeric(null, null, false)),
+                    new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "balanced quoted or unquoted string or sub-array", '{', 1),
+                    '{',
+                    "BIGINT[]",
+                ),
+            ),
             $this->_getPairsOutput()
         );
     }
