@@ -3,11 +3,13 @@ class DB_Type_Numeric extends DB_Type_Abstract_Primitive
 {
     private $_precision;
     private $_width;
+    private $_skipArrayParseOptimization = false;
 
-    public function __construct($width = null, $precision = null)
+    public function __construct($width = null, $precision = null, $skipArrayParseOptimization = false)
     {
         $this->_width = $width;
         $this->_precision = $precision;
+        $this->_skipArrayParseOptimization = $skipArrayParseOptimization;
     }
 
 	public function output($value)
@@ -54,5 +56,10 @@ class DB_Type_Numeric extends DB_Type_Abstract_Primitive
     public function getNativeType()
     {
     	return 'NUMERIC';
-    }	
+    }
+
+    public function skipArrayParseOptimization()
+    {
+        return $this->_skipArrayParseOptimization;
+    }
 }
