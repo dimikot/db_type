@@ -34,7 +34,11 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
 
         $parts = array();
         foreach ($this->_items as $field => $type) {
-            $v = $type->output(isset($value[$field]) ? $value[$field] : null);
+            try {
+                $v = $type->output(isset($value[$field]) ? $value[$field] : null);
+            } catch (\Exception $e) {
+                throw new DB_Type_Exception_Container($this, "output", $field, $e->getMessage());
+            }
             if ($v === null) {
                 $parts[] = '';
             } else {
