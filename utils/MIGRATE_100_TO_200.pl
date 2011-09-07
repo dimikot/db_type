@@ -13,14 +13,14 @@ sub convert {
 	local $/;
 	my $orig = $_ = <F>;
 	close(F);
-	
+
 	do_convert();
-	
+
 	if ($orig ne $_) {
 		print "$File::Find::name\n";
 		open(local *F, ">", $File::Find::name); binmode(F);
 		print F $_;
-		close(F); 
+		close(F);
 	}
 }
 
@@ -53,8 +53,8 @@ sub do_convert {
 
 	# wrappers
 
-	s/DB_Pgsql_Type_EmptyNull/DB_Type_Wrapper_EmptyNull/sg;
-	s/DB_Pgsql_Type_Test_Type_EmptyNullTest/DB_Type_Test_Wrapper_EmptyNullTest/sg;
+	s/DB_Pgsql_Type_EmptyNull/DB_Type_Wrapper_EmptyToNull/sg;
+	s/DB_Pgsql_Type_Test_Type_EmptyNullTest/DB_Type_Test_Wrapper_EmptyToNullTest/sg;
 
 	s/DB_Pgsql_Type_Length/DB_Type_Wrapper_Length/sg;
 	s/DB_Pgsql_Type_Test_Type_LengthTest/DB_Type_Test_Rwapper_LengthTest/sg;
