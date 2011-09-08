@@ -17,7 +17,7 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
 	{
 		return $this->_items;
 	}
-	
+
     public function output($value)
     {
         if ($value === null) {
@@ -36,7 +36,7 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
         foreach ($this->_items as $field => $type) {
             try {
                 $v = $type->output(isset($value[$field]) ? $value[$field] : null);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new DB_Type_Exception_Container($this, "output", $field, $e->getMessage());
             }
             if ($v === null) {
@@ -46,7 +46,7 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
                 $parts[] = '"' . str_replace(array('"', '\\'), array('""', '\\\\'), $v) . '"';
             }
         }
-        
+
         return '(' . join(",", $parts) . ')';
     }
 
@@ -122,7 +122,7 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
 
         return $result;
     }
-    
+
 	public function getNativeType()
     {
     	return $this->_nativeType;
