@@ -24,7 +24,7 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
                 array('b'=>"1", 'a'=>"2"),
                 '("1","2")',
                 'some_table',
-            ),            
+            ),
             array(
                 new DB_Type_Pgsql_Row(array(
                     'b' => new DB_Type_String(),
@@ -111,8 +111,17 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
 	                '(,)',
 	                null
 	            ),
-	        )
-        );
+				'b' => array(
+					new DB_Type_Pgsql_Row(array(
+						'b' => new DB_Type_Int(),
+						'a' => new DB_Type_String(),
+					)),
+					array('b' => 'not_int', 'a' => ""),
+					new DB_Type_Exception_Container(new DB_Type_Pgsql_Row(array()), 'output', 'b', 'DB_Type_Int::output() conversion error: given not_int, expected int32 value'),
+					null
+				),
+			)
+		);
     }
 
     protected function _getPairsInput()
