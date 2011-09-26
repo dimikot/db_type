@@ -4,18 +4,18 @@ class DB_Type_Wrapper_Length extends DB_Type_Abstract_Wrapper
     private $_min;
     private $_max;
 
-    public function __construct(DB_Type_Abstract_Base $item = null, $min = null, $max = null)
+    public function __construct(DB_Type_Abstract_Base $item = null, $keyFrom = null, $keyTo = null)
     {
         parent::__construct($item);
-        $this->_max = $max;
-        $this->_min = $min;
+        $this->_max = $keyTo;
+        $this->_min = $keyFrom;
     }
 
     protected function _input($native)
     {
     	return $native;
     }
-    
+
     protected function _output($value)
     {
         if ($this->_max !== null && strlen($value) > $this->_max) {
@@ -26,7 +26,7 @@ class DB_Type_Wrapper_Length extends DB_Type_Abstract_Wrapper
         }
         return $value;
     }
-    
+
     public function getMin()
     {
     	return $this->_min;

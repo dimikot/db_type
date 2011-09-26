@@ -6,7 +6,7 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
     const TRUNC_DAY = 3;
     const TRUNC_MONTH = 4;
     const TRUNC_YEAR = 5;
-        
+
     public function __construct($trunc = self::TRUNC_DAY)
     {
         $this->_trunc = $trunc;
@@ -25,9 +25,26 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
     	if ($value === null) {
             return null;
         }
+
+		/**
+		 * Value may be array of DateTime::createFromFormat parameters
+		 */
+		if (is_array($value)) {
+			$format = $value[0];
+			$time = $value[1];
+			$timezone = isset($value[2])? $value[2]: null;
+
+			// for except php warning
+			// DateTime::createFromFormat() expects parameter 3 to be DateTimeZone, null given
+			if ($timezone) $date = DateTime::createFromFormat($format, $time, $timezone);
+			else $date = DateTime::createFromFormat($format, $time);
+
+			$value = $date->format('Y-m-d');
+		}
+
         return self::truncDate($value, $this->_trunc);
     }
-    
+
     public static function truncDate($date, $trunc)
     {
     	if (preg_match('/^\d+$/s', $date)) {
@@ -48,7 +65,7 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
         $parts[2] = str_pad($parts[2], 2, '0', STR_PAD_LEFT);
         return join("-", $parts);
     }
-	
+
     public function getNativeType()
     {
     	return 'DATE';

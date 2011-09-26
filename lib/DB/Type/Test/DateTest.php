@@ -9,7 +9,7 @@ class DB_Type_Test_DateTest extends DB_Type_Test_Util_TypeTestCase
                 null,
                 null,
                 'DATE',
-            ),        
+            ),
             array(
                 new DB_Type_Date(DB_Type_Date::TRUNC_DAY),
                 "12-10-2",
@@ -39,19 +39,25 @@ class DB_Type_Test_DateTest extends DB_Type_Test_Util_TypeTestCase
                 "12",
                 "2012-01-01",
                 'DATE',
-            ),            
+            ),
             array(
                 new DB_Type_Date(),
                 "12-11",
                 "2012-11-01",
                 'DATE',
-            ),            
-            array(
+            ),
+			array(
+				new DB_Type_Date(),
+				array('d.m.y', '01.11.12'),
+				"2012-11-01",
+				'DATE',
+			),
+			array(
                 new DB_Type_Date(),
                 "12aaa",
                 new DB_Type_Exception_Date(new DB_Type_Date(), "12aaa"),
                 'DATE',
-            ),            
+            ),
         );
     }
 }

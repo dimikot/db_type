@@ -12,11 +12,11 @@ class DB_Type_Wrapper_Bounds extends DB_Type_Abstract_Wrapper
 	private $_min;
 	private $_max;
 
-	public function __construct(DB_Type_Numeric $item = null, $min = null, $max = null)
+	public function __construct(DB_Type_Numeric $item = null, $keyFrom = null, $keyTo = null)
 	{
 		parent::__construct($item);
-		$this->_max = $max;
-		$this->_min = $min;
+		$this->_max = $keyTo;
+		$this->_min = $keyFrom;
 	}
 
 	protected function _input($native)
