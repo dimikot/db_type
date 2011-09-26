@@ -1,5 +1,5 @@
 <?php
-class DB_Type_Test_Rwapper_LengthTest extends DB_Type_Test_Util_TypeTestCase
+class DB_Type_Test_Wrapper_LengthTest extends DB_Type_Test_Util_TypeTestCase
 {
     protected function _getPairsOutput()
     {
@@ -29,5 +29,5 @@ class DB_Type_Test_Rwapper_LengthTest extends DB_Type_Test_Util_TypeTestCase
                 'VARCHAR',
             ),
         );
-    }    
+    }
 }
