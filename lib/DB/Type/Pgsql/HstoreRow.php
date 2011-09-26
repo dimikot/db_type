@@ -16,8 +16,12 @@ class DB_Type_Pgsql_HstoreRow extends DB_Type_Pgsql_Hstore
             $newValue = array();
             foreach ($value as $key => $v) {
                 if (isset($this->_items[$key])) {
-                    $newValue[$key] = $this->_items[$key]->output($v);
-                }
+					try {
+						$newValue[$key] = $this->_items[$key]->output($v);
+					} catch (Exception $e) {
+						throw new DB_Type_Exception_Container($this, "output", $key, $e->getMessage());
+					}
+				}
             }
             $value = $newValue;
         }
@@ -40,9 +44,9 @@ class DB_Type_Pgsql_HstoreRow extends DB_Type_Pgsql_Hstore
 
         return $result;
     }
-    
+
 	public function getNativeType()
     {
     	return 'hstore';
-    }    
+    }
 }

@@ -1,9 +1,9 @@
 <?php
 
-class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container 
+class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
 {
 	const ESCAPE = '"\\';
-	
+
     public function output($value)
     {
         if (is_null($value)) {
@@ -14,40 +14,47 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
         }
         $parts = array();
         foreach ($value as $key => $value) {
-            $parts[] = 
+			try {
+				$v = $this->_item->output($value);
+			} catch (Exception $e) {
+				throw new DB_Type_Exception_Container($this, "output", $key, $e->getMessage());
+			}
+			$parts[] =
                 '"' . addcslashes($key, self::ESCAPE) . '"' .
                 '=>' .
-                ($value === null? "NULL" : '"' . addcslashes($this->_item->output($value), self::ESCAPE) . '"');
+                ($value === null? "NULL" : '"' . addcslashes($v, self::ESCAPE) . '"');
         }
         return join(",", $parts);
     }
 
-    protected function _parseInput($str, &$p) 
+    protected function _parseInput($str, &$p)
     {
+		$result = array();
+
         // Leading spaces.
         $c = $this->_charAfterSpaces($str, $p);
         if ($c === false) {
         	// Empty array().
-        	return array();
+        	return $result;
         }
-        
+
         while (1) {
             $c = $this->_charAfterSpaces($str, $p);
-            
+
             // End of string.
             if ($c === false) {
                 break;
             }
-            
+
             // Next element.
             if ($c == ',') {
                 $p++;
                 continue;
             }
-            
+
             // Key.
             $key = $this->_readString($str, $p);
-            
+
             // '=>' sequence.
             $this->_charAfterSpaces($str, $p);
             if (call_user_func(self::$_substr, $str, $p, 2) != '=>') {
@@ -55,7 +62,7 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
             }
             $p += 2;
             $this->_charAfterSpaces($str, $p);
-            
+
             // Value.
             $value = $this->_readString($str, $p);
             if (!strcasecmp($value, "null")) {
@@ -64,14 +71,14 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
                 $result[$key] = $this->_item->input($value);
             }
         }
-        
+
         return $result;
     }
-    
+
     private function _readString($str, &$p)
     {
     	$c = call_user_func(self::$_substr, $str, $p, 1);
-    	
+
         // Unquoted string.
         if ($c != '"') {
             $len = strcspn($str, " \r\n\t,=>", $p);
@@ -79,7 +86,7 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
             $p += $len;
             return stripcslashes($value);
         }
-            
+
         // Quoted string.
         $m = null;
         if (preg_match('/" ((?' . '>[^"\\\\]+|\\\\.)*) "/Asx', $str, $m, 0, $p)) {
@@ -87,13 +94,13 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
             $p += call_user_func(self::$_strlen, $m[0]);
             return $value;
         }
-            
+
         // Error.
         throw new DB_Type_Exception_Common($this, "input", "quoted or unquoted string", $str, $p);
     }
-    
+
 	public function getNativeType()
     {
     	return 'hstore';
-    }    
+    }
 }

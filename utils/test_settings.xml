@@ -5,6 +5,7 @@
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
 	stopOnFailure="true">
-  <!--
-  -->
+	<logging>
+		<log type="coverage-clover" target="./logs/coverage.xml"/>
+	</logging>
 </phpunit>

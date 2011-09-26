@@ -93,8 +93,22 @@ class DB_Type_Pgsql_Test_HstoreRowTest extends DB_Type_Test_Util_TypeTestCase
 
     protected function _getPairsOutput()
     {
-	    return $this->_getCommonTests();
-    }
+		return array_merge(
+			$this->_getCommonTests(),
+			array(
+				'a' => array(
+					new DB_Type_Pgsql_HstoreRow(array(
+						'b' => new DB_Type_Int(),
+						'a' => new DB_Type_String(),
+					)),
+					array('b' => 'not_int',
+						  'a' => ""),
+					new DB_Type_Exception_Container(new DB_Type_Pgsql_HstoreRow(array()), 'output', 'b', 'DB_Type_Int::output() conversion error: given not_int, expected int32 value'),
+					null
+				),
+			)
+		);
+	}
 
     protected function _getPairsInput()
     {

@@ -112,6 +112,16 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
 	                null
 	            ),
 				'b' => array(
+					new DB_Type_Pgsql_Row( array(
+						'b' => new DB_Type_String(),
+						'a' => new DB_Type_Wrapper_EmptyToNull(new DB_Type_String()),
+					)),
+					(object) array('b'=> '1',
+						  'a'=> 's'),
+					'("1","s")',
+					null
+				),
+				'c' => array(
 					new DB_Type_Pgsql_Row(array(
 						'b' => new DB_Type_Int(),
 						'a' => new DB_Type_String(),
