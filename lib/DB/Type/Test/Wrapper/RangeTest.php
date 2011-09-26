@@ -47,9 +47,9 @@ class DB_Type_Test_Wrapper_RangeTest extends DB_Type_Test_Util_TypeTestCase
 			),
 			array(
 				$wrapperToTest_date,
-				array('date_from' => array('d.m.Y', '15.05.2005'),
-					  'date_to'   => array('d.m.Y', '25.05.2005')),
-				'("2005-05-15","2005-05-25")',
+				array('date_from' => array('d.m.Y', '25.05.2003'),
+					  'date_to'   => array('d.m.Y', '15.05.2005')),
+				'("2003-05-25","2005-05-15")',
 				null,
 			),
 		);

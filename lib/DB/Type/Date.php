@@ -30,16 +30,7 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
 		 * Value may be array of DateTime::createFromFormat parameters
 		 */
 		if (is_array($value)) {
-			$format = $value[0];
-			$time = $value[1];
-			$timezone = isset($value[2])? $value[2]: null;
-
-			// for except php warning
-			// DateTime::createFromFormat() expects parameter 3 to be DateTimeZone, null given
-			if ($timezone) $date = DateTime::createFromFormat($format, $time, $timezone);
-			else $date = DateTime::createFromFormat($format, $time);
-
-			$value = $date->format('Y-m-d');
+			$value = self::extractDate($value);
 		}
 
         return self::truncDate($value, $this->_trunc);
@@ -70,4 +61,18 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
     {
     	return 'DATE';
     }
+
+	public static function extractDate($array)
+	{
+		$format   = $array[0];
+		$time     = $array[1];
+		$timezone = isset($array[2]) ? $array[2] : null;
+
+		// for except php warning
+		// DateTime::createFromFormat() expects parameter 3 to be DateTimeZone, null given
+		if ($timezone) $date = DateTime::createFromFormat($format, $time, $timezone);
+		else $date = DateTime::createFromFormat($format, $time);
+
+		return $date->format('Y-m-d');
+	}
 }
