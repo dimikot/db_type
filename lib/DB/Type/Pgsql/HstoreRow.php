@@ -29,12 +29,12 @@ class DB_Type_Pgsql_HstoreRow extends DB_Type_Pgsql_Hstore
         return parent::output($value);
     }
 
-    protected function _parseInput($str, &$p)
+    protected function _parseInput($str, &$p, $for='')
     {
         $result = parent::_parseInput($str, $p);
         foreach ($result as $key => $v) {
             if (isset($this->_items[$key])) {
-                $result[$key] = $this->_items[$key]->input($v);
+                $result[$key] = $this->_items[$key]->input($v, $for);
             } else {
             	// Extra column in hstore must not break the program execution!
             	$result[$key] = null;

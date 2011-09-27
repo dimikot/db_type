@@ -50,7 +50,7 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
         return '(' . join(",", $parts) . ')';
     }
 
-    protected function _parseInput($str, &$p)
+    protected function _parseInput($str, &$p, $for='')
     {
         reset($this->_items);
     	$result = array();
@@ -95,12 +95,12 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
                 // Unquoted string. NULL here is treated as "NULL" string, but NOT as a null value!
                	$len = strcspn($str, ",)", $p);
 	           	$v = call_user_func(self::$_substr, $str, $p, $len);
-                $result[$field] = $type->input($v);
+                $result[$field] = $type->input($v, $for);
 	           	$p += $len;
 	        } else if (preg_match('/" ((?' . '>[^"]+|"")*) "/Asx', $str, $m, 0, $p)) {
                 // Quoted string.
                	$v = str_replace(array('""', '\\\\'), array('"', '\\'), $m[1]);
-               	$result[$field] = $type->input($v);
+               	$result[$field] = $type->input($v, $for);
 	            $p += call_user_func(self::$_strlen, $m[0]);
 	        } else {
                 // Error.

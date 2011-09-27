@@ -27,7 +27,7 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
         return join(",", $parts);
     }
 
-    protected function _parseInput($str, &$p)
+    protected function _parseInput($str, &$p, $for='')
     {
 		$result = array();
 
@@ -68,7 +68,7 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
             if (!strcasecmp($value, "null")) {
                 $result[$key] = null;
             } else {
-                $result[$key] = $this->_item->input($value);
+                $result[$key] = $this->_item->input($value, $for);
             }
         }
 

@@ -2,14 +2,18 @@
 class DB_Type_Date extends DB_Type_Abstract_Primitive
 {
     private $_trunc;
+	private $_format;
+	private $_timezone;
 
     const TRUNC_DAY = 3;
     const TRUNC_MONTH = 4;
     const TRUNC_YEAR = 5;
 
-    public function __construct($trunc = self::TRUNC_DAY)
+    public function __construct($trunc = self::TRUNC_DAY, $format = null, $timezone = null)
     {
         $this->_trunc = $trunc;
+		$this->_format = $format;
+		$this->_timezone = $timezone;
     }
 
     public function input($native)
@@ -17,7 +21,15 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
     	if ($native === null) {
     		return null;
     	}
-    	return self::truncDate($native, $this->_trunc);
+		if ($this->_format) {
+			if ($this->_timezone) $date = DateTime::createFromFormat('Y-m-d', $native, $this->_timezone);
+			else $date = DateTime::createFromFormat('Y-m-d', $native);
+
+			if ($date === false) return $native;
+
+			return $date->format($this->_format);
+		}
+    	else return self::truncDate($native, $this->_trunc);
     }
 
     public function output($value)
@@ -31,6 +43,8 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
 		 */
 		if (is_array($value)) {
 			$value = self::extractDate($value);
+		} elseif ($this->_format != null) {
+			$value = self::convertFromFormat($this->_format, $value, $this->_timezone);
 		}
 
         return self::truncDate($value, $this->_trunc);
@@ -62,17 +76,24 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
     	return 'DATE';
     }
 
+	private static function convertFromFormat($format, $time, $timezone=null)
+	{
+		// for except php warning
+		// DateTime::createFromFormat() expects parameter 3 to be DateTimeZone, null given
+		if ($timezone) $date = DateTime::createFromFormat($format, $time, $timezone);
+		else $date = DateTime::createFromFormat($format, $time);
+
+		if ($date === false) return $time;
+
+		return $date->format('Y-m-d');
+	}
+
 	public static function extractDate($array)
 	{
 		$format   = $array[0];
 		$time     = $array[1];
 		$timezone = isset($array[2]) ? $array[2] : null;
 
-		// for except php warning
-		// DateTime::createFromFormat() expects parameter 3 to be DateTimeZone, null given
-		if ($timezone) $date = DateTime::createFromFormat($format, $time, $timezone);
-		else $date = DateTime::createFromFormat($format, $time);
-
-		return $date->format('Y-m-d');
+		return self::convertFromFormat($format, $time, $timezone);
 	}
 }
