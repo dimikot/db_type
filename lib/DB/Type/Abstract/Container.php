@@ -61,6 +61,11 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
     	if ($native === null) {
     		return null;
     	}
+
+		if ( is_array($native) ) {
+			return $this->_itemsInput($native, $for);
+		}
+
         $pos = 0;
         $value = $this->_parseInput($native, $pos, $for);
         if ($pos != call_user_func(self::$_strlen, $native)) {
@@ -81,4 +86,16 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
 	 * @return mixed
 	 */
     abstract protected function _parseInput($native, &$pos, $for='');
+
+	/**
+	 * Parse each element of an array of native values into PHP array.
+	 * Method used for parsing SQL query result (as assoc array)
+	 * which contains complex data types.
+	 *
+	 * @abstract
+	 * @param array $native
+	 * @param string $for
+	 * @return array
+	 */
+	abstract protected function _itemsInput(array $native, $for = '');
 }

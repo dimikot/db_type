@@ -75,7 +75,16 @@ class DB_Type_Pgsql_Test_HstoreTest extends DB_Type_Test_Util_TypeTestCase
                     new DB_Type_Exception_Common(new DB_Type_Pgsql_Hstore(new DB_Type_String()), "input", "quoted or unquoted string", '"aaa', 0),
                     '"aaa',
                 ),
-            )
+				// test for itemsInput
+				array(
+					new DB_Type_Pgsql_Hstore(
+						new DB_Type_Pgsql_Hstore(new DB_Type_String())
+					),
+					array('bbb' => array("aaa" => null)),
+					array("bbb" => "aaa => NULL"),
+				),
+				// test for itemsInput
+			)
         );
     }
 }

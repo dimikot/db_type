@@ -74,7 +74,7 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
             	if (!($this->_item instanceof DB_Type_Pgsql_Array)) {
             		throw new DB_Type_Exception_Common($this, "input", "scalar value", $str, $p);
             	}
-                $result[] = $this->_item->_parseInput($str, $p);
+                $result[] = $this->_item->_parseInput($str, $p, $for);
                 continue;
             }
 
@@ -110,4 +110,20 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
     {
     	return $this->_item->getNativeType() . '[]';
     }
+
+	/**
+	 * Parse each element of an array of native values into PHP array.
+	 * Method used for parsing SQL query result (as assoc array)
+	 * which contains complex data types.
+	 *
+	 * @param array $native
+	 * @param string $for
+	 * @return array
+	 */
+	protected function _itemsInput(array $native, $for = '')
+	{
+		foreach ($native as &$value)
+			$value = $this->_item->input($value, $for);
+		return $native;
+	}
 }

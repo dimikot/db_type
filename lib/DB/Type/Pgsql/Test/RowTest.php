@@ -195,6 +195,33 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
     	            array('b'=>"aaaaa aa", 'a'=>"2"),
     	            '("aaaaa aa","2")',
     	        ),
+				// tests for itemsInput
+    	        array(
+                    new DB_Type_Pgsql_Row(array(
+                        'b' => new DB_Type_Pgsql_Row(array(
+							'c' => new DB_Type_Int(),
+							'd' => new DB_Type_String()
+						)),
+                        'a' => new DB_Type_String(),
+                    )),
+    	            array('b'=>array('c'=>'5','d'=>'ddd'), 'a'=>"2"),
+    	            array('b'=>'("5","ddd")', 'a'=>'2'),
+    	        ),
+    	        /* Failed asserting in testInputOutputInput
+    	        because output truncates `not_in_items` field.
+    	        Usage example see in examples/itemsInput.php
+    	        array(
+                    new DB_Type_Pgsql_Row(array(
+                        'b' => new DB_Type_Pgsql_Row(array(
+							'c' => new DB_Type_Int(),
+							'd' => new DB_Type_String()
+						)),
+                        'a' => new DB_Type_String(),
+                    )),
+    	            array('b'=>array('c'=>'5', 'd'=>'ddd'), 'a'=>"2", 'not_in_items'=>'g'),
+    	            array('b'=>'("5","ddd")', 'a'=>'2', 'not_in_items'=>'g'),
+    	        ),*/
+				// tests for itemsInput
             )
         );
     }

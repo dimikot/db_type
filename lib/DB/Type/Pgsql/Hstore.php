@@ -103,4 +103,20 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
     {
     	return 'hstore';
     }
+
+	/**
+	 * Parse each element of an array of native values into PHP array.
+	 * Method used for parsing SQL query result (as assoc array)
+	 * which contains complex data types.
+	 *
+	 * @param array $native
+	 * @param string $for
+	 * @return array
+	 */
+	protected function _itemsInput(array $native, $for = '')
+	{
+		foreach ($native as &$value)
+			$value = $this->_item->input($value, $for);
+		return $native;
+	}
 }

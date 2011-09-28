@@ -127,4 +127,27 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
     {
     	return $this->_nativeType;
     }
+
+	/**
+	 * Parse each element of an array of native values into PHP array.
+	 * Method used for parsing SQL query result (as assoc array)
+	 * which contains complex data types.
+	 *
+	 * @param $native
+	 * @param string $for
+	 * @return array
+	 */
+	protected function _itemsInput(array $native, $for = '')
+	{
+		$result = array();
+
+		foreach ( $native as $field => $value ) {
+			if ( key_exists($field, $this->_items) )
+				$result[$field] = $this->_items[$field]->input($value, $for);
+			else
+				$result[$field] = $value;
+		}
+
+		return $result;
+	}
 }

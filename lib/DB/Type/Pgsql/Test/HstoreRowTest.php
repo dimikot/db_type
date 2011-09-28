@@ -112,6 +112,32 @@ class DB_Type_Pgsql_Test_HstoreRowTest extends DB_Type_Test_Util_TypeTestCase
 
     protected function _getPairsInput()
     {
-        return $this->_getCommonTests();
-    }
+		return array_merge(
+			$this->_getCommonTests(),
+			array(
+				// tests for itemsInput
+				__LINE__ => array(
+					new DB_Type_Pgsql_HstoreRow(array(
+						'b' => new DB_Type_Int(),
+						'a' => new DB_Type_Pgsql_Array(new DB_Type_Int()),
+					)),
+					array('b'=> "1", 'a'=> array('1', '2')),
+					array('b'=> "1", 'a'=> '{1,2}')
+				),
+				/* Failed asserting in testInputOutputInput
+    	        because output truncates `not_in_items` field.
+    	        Usage example see in examples/itemsInput.php
+				__LINE__ => array(
+					new DB_Type_Pgsql_HstoreRow(array(
+						'b' => new DB_Type_Int(),
+						'a' => new DB_Type_Pgsql_Array(new DB_Type_Int()),
+					)),
+					array('b'=> "1", 'a'=> array('1', '2'), 'not_in_items'=>'5'),
+					array('b'=> "1", 'a'=> '{1,2}', 'not_in_items'=> '5')
+				),*/
+				// tests for itemsInput
+			)
+		);
+		return $this->_getCommonTests();
+	}
 }

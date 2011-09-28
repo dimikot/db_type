@@ -18,37 +18,37 @@ class DB_Type_Pgsql_Test_ArrayTest extends DB_Type_Test_Util_TypeTestCase
 		            "VARCHAR[]",
 		        ),
 		        array(
-	                new DB_Type_Pgsql_Array(new DB_Type_Pgsql_Array(new DB_Type_String())),	        
+	                new DB_Type_Pgsql_Array(new DB_Type_Pgsql_Array(new DB_Type_String())),
 		            array(array('1'), array(), array('zzz"3"'), array('4')),
 		            '{{"1"},  {}  ,  {zzz"3"},  {"4"},,,   }',
 		            "VARCHAR[][]",
 		        ),
 	            array(
-	                new DB_Type_Pgsql_Array(new DB_Type_String()),            
+	                new DB_Type_Pgsql_Array(new DB_Type_String()),
 	                null,
 	                null,
 	                "VARCHAR[]",
 	            ),
 	            array(
-	                new DB_Type_Pgsql_Array(new DB_Type_String()),            
+	                new DB_Type_Pgsql_Array(new DB_Type_String()),
 	                new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "'{'", ' aaa', 1),
                     ' aaa',
 	                "VARCHAR[]",
 	            ),
                 array(
-                    new DB_Type_Pgsql_Array(new DB_Type_String()),            
+                    new DB_Type_Pgsql_Array(new DB_Type_String()),
                     new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "scalar value", '{{aa}}', 1),
                     '{{aa}}',
                     "VARCHAR[]",
                 ),
                 array(
-                    new DB_Type_Pgsql_Array(new DB_Type_String()),            
+                    new DB_Type_Pgsql_Array(new DB_Type_String()),
                     new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "balanced quoted or unquoted string or sub-array", '{"a}', 1),
                     '{"a}',
                     "VARCHAR[]",
                 ),
                 array(
-                    new DB_Type_Pgsql_Array(new DB_Type_String()),            
+                    new DB_Type_Pgsql_Array(new DB_Type_String()),
                     new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "end of string", '{aaa} bbb', 5),
                     '{aaa} bbb',
                     "VARCHAR[]",
@@ -83,7 +83,18 @@ class DB_Type_Pgsql_Test_ArrayTest extends DB_Type_Test_Util_TypeTestCase
                     '{',
                     "BIGINT[]",
                 ),
-            ),
+				// test for itemsInput
+				array(
+					new DB_Type_Pgsql_Array(new DB_Type_Pgsql_Row(array(
+							'a' => new DB_Type_Int(),
+							'b' => new DB_Type_String()
+						))),
+					array(array('a'=>"1", 'b'=>"d"), array('a'=>"3", 'b'=>"e")),
+					array('("1","d")', '("3","e")'),
+					"ROW[]",
+				),
+				// test for itemsInput
+			),
             $this->_getPairsOutput()
         );
     }
@@ -110,13 +121,13 @@ class DB_Type_Pgsql_Test_ArrayTest extends DB_Type_Test_Util_TypeTestCase
 	            "VARCHAR[]",
 	        ),
             array(
-                new DB_Type_Pgsql_Array(new DB_Type_String()),            
+                new DB_Type_Pgsql_Array(new DB_Type_String()),
                 array(),
                 '{}',
                 "VARCHAR[]",
             ),
             array(
-                new DB_Type_Pgsql_Array(new DB_Type_String()),            
+                new DB_Type_Pgsql_Array(new DB_Type_String()),
                 'aaa',
                 new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "output", "PHP-array or null", 'aaa'),
                 "VARCHAR[]",
