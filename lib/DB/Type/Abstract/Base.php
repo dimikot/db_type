@@ -8,7 +8,7 @@ abstract class DB_Type_Abstract_Base
      * @return string
      */
     abstract public function output($value);
-    
+
     /**
      * Parse a native value into PHP variable.
      * Throws exception if parsing process is finished
@@ -18,11 +18,16 @@ abstract class DB_Type_Abstract_Base
      * @return mixed
      */
     abstract public function input($native);
-    
+
     /**
      * Return native type name for this value.
      *
      * @return string
      */
     abstract public function getNativeType();
+
+	public function getEmpty()
+	{
+		return null;
+	}
 }

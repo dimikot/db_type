@@ -150,4 +150,14 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
 
 		return $result;
 	}
+
+	public function getEmpty()
+	{
+		$result = array();
+		foreach ( $this->_items as $field => $type )
+			$result[$field] = $type->getEmpty();
+		return $result;
+	}
+
+
 }
