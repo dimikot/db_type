@@ -13,7 +13,7 @@ abstract class DB_Type_Abstract_Wrapper extends DB_Type_Abstract_Base
         $this->_item = $item? $item : new DB_Type_String();
     }
 
-    public final function input($native, $for='')
+    public /*final*/ function input($native, $for='')
     {
     	if ($native === null) {
     		return null;
@@ -25,7 +25,7 @@ abstract class DB_Type_Abstract_Wrapper extends DB_Type_Abstract_Base
     	return $this->_input($this->_item->input($native, $for));
     }
 
-    public final function output($value)
+    public /*final*/ function output($value)
     {
         if ($value === null) {
             return null;
