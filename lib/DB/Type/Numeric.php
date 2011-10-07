@@ -45,14 +45,14 @@ class DB_Type_Numeric extends DB_Type_Abstract_Primitive
 		return $value;
 	}
 
-	public function input($value)
+	public function input($value, $for='')
 	{
         if ($value === null) {
             return null;
         }
 		return $value;
 	}
-	
+
     public function getNativeType()
     {
     	return 'NUMERIC';

@@ -29,14 +29,14 @@ class DB_Type_String extends DB_Type_Abstract_Primitive
         return $value;
 	}
 
-	public function input($native)
+	public function input($native, $for='')
 	{
         if ($native === null) {
             return null;
         }
 		return strval($native);
 	}
-	
+
     public function getNativeType()
     {
     	return 'VARCHAR';

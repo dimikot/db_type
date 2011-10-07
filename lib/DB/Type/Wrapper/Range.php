@@ -4,11 +4,11 @@ class DB_Type_Wrapper_Range extends DB_Type_Abstract_Wrapper
 	private $_keyFrom;
 	private $_keyTo;
 
-	public function __construct(DB_Type_Pgsql_Row $item = null, $keyFrom = 'value_from', $keyTo = 'value_to')
+	public function __construct(DB_Type_Pgsql_Row $item = null, $min = 'value_from', $max = 'value_to')
 	{
 		parent::__construct($item);
-		$this->_keyTo   = $keyTo;
-		$this->_keyFrom = $keyFrom;
+		$this->_keyTo   = $max;
+		$this->_keyFrom = $min;
 	}
 
 	protected function _input($native)

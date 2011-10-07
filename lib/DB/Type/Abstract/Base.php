@@ -9,15 +9,16 @@ abstract class DB_Type_Abstract_Base
      */
     abstract public function output($value);
 
-    /**
-     * Parse a native value into PHP variable.
-     * Throws exception if parsing process is finished
-     * before the string is ended.
-     *
-     * @param string $native
-     * @return mixed
-     */
-    abstract public function input($native);
+	/**
+	 * Parse a native value into PHP variable.
+	 * Throws exception if parsing process is finished
+	 * before the string is ended.
+	 *
+	 * @param string $native
+	 * @param string $for used for input customization in user defined descendant classes
+	 * @return mixed
+	 */
+    abstract public function input($native, $for='');
 
     /**
      * Return native type name for this value.

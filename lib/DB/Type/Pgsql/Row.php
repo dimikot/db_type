@@ -144,8 +144,8 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
 		foreach ( $native as $field => $value ) {
 			if ( key_exists($field, $this->_items) )
 				$result[$field] = $this->_items[$field]->input($value, $for);
-			else
-				$result[$field] = $value;
+			/*else
+				$result[$field] = $value;*/
 		}
 
 		return $result;

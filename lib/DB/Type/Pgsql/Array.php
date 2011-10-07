@@ -126,4 +126,11 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
 			$value = $this->_item->input($value, $for);
 		return $native;
 	}
+
+	public function getEmpty()
+	{
+		return array();
+	}
+
+
 }

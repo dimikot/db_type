@@ -12,7 +12,7 @@ class DB_Type_Time extends DB_Type_Abstract_Primitive
         $this->_trunc = $trunc;
     }
 
-    public function input($native)
+    public function input($native, $for = '')
     {
     	if ($native === null) {
     		return null;
@@ -47,9 +47,9 @@ class DB_Type_Time extends DB_Type_Abstract_Primitive
         }
         return join(":", $parts);
     }
-	
+
     public function getNativeType()
     {
     	return 'TIME';
-    }    
+    }
 }

@@ -41,9 +41,9 @@ class DB_Type_Pgsql_Enum extends DB_Type_Abstract_Primitive {
 	 * @param string $native
 	 * @return mixed
 	 */
-	public function input($native)
+	public function input($native, $for='')
 	{
-		$this->checkValue($native);
+		//$this->checkValue($native);
 		return $native;
 	}
 

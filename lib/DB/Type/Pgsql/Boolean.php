@@ -1,5 +1,5 @@
 <?php
-class DB_Type_Pgsql_Boolean extends DB_Type_Abstract_Primitive 
+class DB_Type_Pgsql_Boolean extends DB_Type_Abstract_Primitive
 {
 	public function output($value)
 	{
@@ -9,7 +9,7 @@ class DB_Type_Pgsql_Boolean extends DB_Type_Abstract_Primitive
 		return !$value || $value === "false" || $value === "f"? 'f' : 't';
 	}
 
-    public function input($native)
+    public function input($native, $for = '')
     {
     	if ($native === null) {
     		return null;
@@ -17,7 +17,7 @@ class DB_Type_Pgsql_Boolean extends DB_Type_Abstract_Primitive
     	$native = strval($native);
         return $native === 'false' || $native === 'f' || $native === '0' || $native === ''? false : true;
     }
-	
+
     public function getNativeType()
     {
     	return 'BOOLEAN';

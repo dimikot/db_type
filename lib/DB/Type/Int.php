@@ -18,13 +18,13 @@ class DB_Type_Int extends DB_Type_Numeric
 		return $value;
 	}
 
-	public function input($value)
+	public function input($value, $for = '')
 	{
 		return $value;
 	}
-	
+
     public function getNativeType()
     {
     	return 'INT';
-    }	
+    }
 }

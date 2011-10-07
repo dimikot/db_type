@@ -16,7 +16,7 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
 		$this->_timezone = $timezone;
     }
 
-    public function input($native)
+    public function input($native, $for = '')
     {
     	if ($native === null) {
     		return null;
@@ -76,7 +76,7 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
     	return 'DATE';
     }
 
-	private static function convertFromFormat($format, $time, $timezone=null)
+	public static function convertFromFormat($format, $time, $timezone=null)
 	{
 		// for except php warning
 		// DateTime::createFromFormat() expects parameter 3 to be DateTimeZone, null given
