@@ -1,7 +1,7 @@
 DB_Type: conversion of complex PostgreSQL types (ARRAY, ROW, HSTORE) to PHP and vice versa
 Version: 2.x
 (C) Dmitry Koterov, http://en.dklab.ru/lib/DB_Type/
-License: GPL
+License: LGPL
 
 ABSTRACT
 --------
