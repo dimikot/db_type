@@ -1,8 +1,8 @@
 <?php
 class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
 {
-	private function _getCommonTests()
-	{
+    private function _getCommonTests()
+    {
         return array(
             array(
                 new DB_Type_Pgsql_Row(array(
@@ -15,11 +15,11 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
             ),
             array(
                 new DB_Type_Pgsql_Row(
-                	array(
-                    	'b' => new DB_Type_String(),
-                    	'a' => new DB_Type_String(),
-                	),
-                	'some_table'
+                    array(
+                        'b' => new DB_Type_String(),
+                        'a' => new DB_Type_String(),
+                    ),
+                    'some_table'
                 ),
                 array('b'=>"1", 'a'=>"2"),
                 '("1","2")',
@@ -95,23 +95,23 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
                 null,
             ),
         );
-	}
+    }
 
     protected function _getPairsOutput()
     {
-	    return array_merge(
+        return array_merge(
             $this->_getCommonTests(),
             array(
-	            'a' => array(
-	                new DB_Type_Pgsql_Row(array(
-	                    'b' => new DB_Type_String(),
-	                    'a' => new DB_Type_Wrapper_EmptyToNull(new DB_Type_String()),
-	                )),
-	                array('b'=>null, 'a'=>""),
-	                '(,)',
-	                null
-	            ),
-	        )
+                'a' => array(
+                    new DB_Type_Pgsql_Row(array(
+                        'b' => new DB_Type_String(),
+                        'a' => new DB_Type_Wrapper_EmptyToNull(new DB_Type_String()),
+                    )),
+                    array('b'=>null, 'a'=>""),
+                    '(,)',
+                    null
+                ),
+            )
         );
     }
 
@@ -120,11 +120,11 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
         return array_merge(
             $this->_getCommonTests(),
             array(
-	            array(
-	                new DB_Type_Pgsql_Row(array("a" => new DB_Type_String())),
-	                new DB_Type_Exception_Common(new DB_Type_Pgsql_Row(array("a" => new DB_Type_String())), "input", "start of a row '('", 'xxx'),
+                array(
+                    new DB_Type_Pgsql_Row(array("a" => new DB_Type_String())),
+                    new DB_Type_Exception_Common(new DB_Type_Pgsql_Row(array("a" => new DB_Type_String())), "input", "start of a row '('", 'xxx'),
                     'xxx',
-	            ),
+                ),
                 array(
                     new DB_Type_Pgsql_Row(array("a" => new DB_Type_String())),
                     new DB_Type_Exception_Common(new DB_Type_Pgsql_Row(array("a" => new DB_Type_String())), "input", "field 'a' value", '()', 1),
@@ -160,22 +160,22 @@ class DB_Type_Pgsql_Test_RowTest extends DB_Type_Test_Util_TypeTestCase
                     new DB_Type_Exception_Common(new DB_Type_Pgsql_Row(array("a" => new DB_Type_String())), "input", "delimiter ',' or ')'", '(aa', 3),
                     '(aa',
                 ),
-    	        array(
+                array(
                     new DB_Type_Pgsql_Row(array(
                         'b' => new DB_Type_String(),
                         'a' => new DB_Type_String(),
                     )),
-    	            array('b'=>'ффф', 'a'=>"2"),
-    	            '(ффф,"2")',
-    	        ),
-    	        array(
+                    array('b'=>'ффф', 'a'=>"2"),
+                    '(ффф,"2")',
+                ),
+                array(
                     new DB_Type_Pgsql_Row(array(
                         'b' => new DB_Type_String(),
                         'a' => new DB_Type_String(),
                     )),
-    	            array('b'=>"aaaaa aa", 'a'=>"2"),
-    	            '("aaaaa aa","2")',
-    	        ),
+                    array('b'=>"aaaaa aa", 'a'=>"2"),
+                    '("aaaaa aa","2")',
+                ),
             )
         );
     }

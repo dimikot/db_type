@@ -14,15 +14,15 @@ class DB_Type_Time extends DB_Type_Abstract_Primitive
 
     public function input($native)
     {
-    	if ($native === null) {
-    		return null;
-    	}
-    	return self::truncTime($native, $this->_trunc);
+        if ($native === null) {
+            return null;
+        }
+        return self::truncTime($native, $this->_trunc);
     }
 
     public function output($value)
     {
-    	if ($value === null) {
+        if ($value === null) {
             return null;
         }
         return self::truncTime($value, $this->_trunc, true);
@@ -30,16 +30,16 @@ class DB_Type_Time extends DB_Type_Abstract_Primitive
 
     public static function truncTime($time, $trunc, $forOutput = false)
     {
-    	if (preg_match('/^[012]{0,1}\d$/s', $time)) {
-    		$time .= ":00:00";
-    	} else if (preg_match('/^[012]{0,1}\d:\d\d?$/s', $time)) {
+        if (preg_match('/^[012]{0,1}\d$/s', $time)) {
+            $time .= ":00:00";
+        } else if (preg_match('/^[012]{0,1}\d:\d\d?$/s', $time)) {
             $time .= ":00";
-    	} else if (preg_match('/^[012]{0,1}\d:\d\d?:\d\d?$/s', $time)) {
-    		// ok
-    	} else {
-    		throw new DB_Type_Exception_Time(new self($trunc), $time);
-    	}
-    	$parts = explode(":", $time);
+        } else if (preg_match('/^[012]{0,1}\d:\d\d?:\d\d?$/s', $time)) {
+            // ok
+        } else {
+            throw new DB_Type_Exception_Time(new self($trunc), $time);
+        }
+        $parts = explode(":", $time);
         if ($trunc > self::TRUNC_SECOND) { if ($forOutput) $parts[2] = 0; else unset($parts[2]); }
         if ($trunc > self::TRUNC_MINUTE) { if ($forOutput) $parts[1] = 0; else unset($parts[1]); }
         foreach ($parts as $i => $part) {
@@ -47,9 +47,9 @@ class DB_Type_Time extends DB_Type_Abstract_Primitive
         }
         return join(":", $parts);
     }
-	
+    
     public function getNativeType()
     {
-    	return 'TIME';
+        return 'TIME';
     }    
 }

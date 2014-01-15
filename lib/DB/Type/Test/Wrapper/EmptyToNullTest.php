@@ -6,6 +6,14 @@ class DB_Type_Test_Wrapper_EmptyToNullTest extends DB_Type_Test_Util_TypeTestCas
         return array(
             array(
                 new DB_Type_Wrapper_EmptyToNull(
+                    new DB_Type_Wrapper_NullToDefault('def', new DB_Type_String())
+                ),
+                null,
+                'def',
+                'VARCHAR',
+            ),
+            array(
+                new DB_Type_Wrapper_EmptyToNull(
                     new DB_Type_String()
                 ),
                 "",

@@ -10,15 +10,15 @@ class DB_Type_String extends DB_Type_Abstract_Primitive
         $this->_min = $min;
     }
 
-	public function output($value)
-	{
+    public function output($value)
+    {
         if ($value === null) {
             return null;
         }
 
-		$value = strval($value);
+        $value = strval($value);
 
-		if ($this->_max !== null && strlen($value) > $this->_max) {
+        if ($this->_max !== null && strlen($value) > $this->_max) {
             throw new DB_Type_Exception_Common($this, __FUNCTION__, 'String less than: ' . $this->_max, $value);
         }
 
@@ -27,18 +27,18 @@ class DB_Type_String extends DB_Type_Abstract_Primitive
         }
 
         return $value;
-	}
+    }
 
-	public function input($native)
-	{
+    public function input($native)
+    {
         if ($native === null) {
             return null;
         }
-		return strval($native);
-	}
-	
+        return strval($native);
+    }
+    
     public function getNativeType()
     {
-    	return 'VARCHAR';
+        return 'VARCHAR';
     }
 }

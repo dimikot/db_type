@@ -17,15 +17,15 @@ class DB_Type_Timestamp extends DB_Type_Abstract_Primitive
 
     public function input($native)
     {
-    	if ($native === null) {
-    		return null;
-    	}
-    	return self::truncTimestamp(strtotime($native), $this->_trunc);
+        if ($native === null) {
+            return null;
+        }
+        return self::truncTimestamp(strtotime($native), $this->_trunc);
     }
 
     public function output($value)
     {
-    	if ($value === null) {
+        if ($value === null) {
             return null;
         }
         $value = self::truncTimestamp($value, $this->_trunc);
@@ -42,9 +42,9 @@ class DB_Type_Timestamp extends DB_Type_Abstract_Primitive
         if ($trunc > self::TRUNC_MONTH) $parts['mon'] = 1;
         return mktime($parts['hours'], $parts['minutes'], $parts['seconds'], $parts['mon'], $parts['mday'], $parts['year']);
     }
-	
+    
     public function getNativeType()
     {
-    	return 'TIMESTAMP';
+        return 'TIMESTAMP';
     }
 }

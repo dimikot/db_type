@@ -13,7 +13,7 @@ class DB_Type_Wrapper_Length extends DB_Type_Abstract_Wrapper
 
     protected function _input($native)
     {
-    	return $native;
+        return $native;
     }
     
     protected function _output($value)
@@ -29,7 +29,7 @@ class DB_Type_Wrapper_Length extends DB_Type_Abstract_Wrapper
     
     public function getMin()
     {
-    	return $this->_min;
+        return $this->_min;
     }
 
     public function getMax()

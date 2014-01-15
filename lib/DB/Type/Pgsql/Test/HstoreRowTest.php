@@ -1,8 +1,8 @@
 <?php
 class DB_Type_Pgsql_Test_HstoreRowTest extends DB_Type_Test_Util_TypeTestCase
 {
-	private function _getCommonTests()
-	{
+    private function _getCommonTests()
+    {
         return array(
             __LINE__ => array(
                 new DB_Type_Pgsql_HstoreRow(array(
@@ -89,11 +89,11 @@ class DB_Type_Pgsql_Test_HstoreRowTest extends DB_Type_Test_Util_TypeTestCase
                 "hstore",
             ),
         );
-	}
+    }
 
     protected function _getPairsOutput()
     {
-	    return $this->_getCommonTests();
+        return $this->_getCommonTests();
     }
 
     protected function _getPairsInput()

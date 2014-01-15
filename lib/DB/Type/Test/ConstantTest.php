@@ -22,7 +22,7 @@ class DB_Type_Test_ConstantTest extends DB_Type_Test_Util_TypeTestCase
                 null,
                 "INT",
             ),
-    	);
+        );
     }
         
     protected function _getPairsInput()
@@ -38,7 +38,7 @@ class DB_Type_Test_ConstantTest extends DB_Type_Test_Util_TypeTestCase
     
     public function testInputOutputInput()
     {
-    	// Do not test that, because not commutative.
-    	$this->assertEquals(1, 1);
+        // Do not test that, because not commutative.
+        $this->assertEquals(1, 1);
     }
 }

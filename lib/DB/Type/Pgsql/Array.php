@@ -7,16 +7,16 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
         if ($value === null) {
             return null;
         }
-    	if (!is_array($value)) {
+        if (!is_array($value)) {
             throw new DB_Type_Exception_Common($this, "output", "PHP-array or null", $value);
         }
         $parts = array();
         foreach ($value as $v) {
             $inner = $this->_item->output($v);
-        	if ($inner === null) {
+            if ($inner === null) {
                 $parts[] = 'NULL';
             } else {
-            	// ARRAY() adds a slash before ["] and [\] only: src\backend\utils\adt\arrayfuncs.c
+                // ARRAY() adds a slash before ["] and [\] only: src\backend\utils\adt\arrayfuncs.c
                 $parts[] = (($this->_item instanceof self)? $inner : '"' . addcslashes($inner, "\"\\") . '"'); 
             }
         }
@@ -71,23 +71,23 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
             
             // Sub-array.
             if ($c == '{') {
-            	if (!($this->_item instanceof DB_Type_Pgsql_Array)) {
-            		throw new DB_Type_Exception_Common($this, "input", "scalar value", $str, $p);
-            	}
+                if (!($this->_item instanceof DB_Type_Pgsql_Array)) {
+                    throw new DB_Type_Exception_Common($this, "input", "scalar value", $str, $p);
+                }
                 $result[] = $this->_item->_parseInput($str, $p);
                 continue;
             }
             
             // Unquoted string.
             if ($c !== '"' && $c !== false) {
-            	$len = strcspn($str, ",}", $p);
-            	$v = stripcslashes(call_user_func(self::$_substr, $str, $p, $len));
-            	if (!strcasecmp($v, "null")) {
-            		$result[] = null;
-            	} else {
+                $len = strcspn($str, ",}", $p);
+                $v = stripcslashes(call_user_func(self::$_substr, $str, $p, $len));
+                if (!strcasecmp($v, "null")) {
+                    $result[] = null;
+                } else {
                     $result[] = $this->_item->input($v);
-            	}
-            	$p += $len;
+                }
+                $p += $len;
                 continue;
             }
             
@@ -106,8 +106,8 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
         return $result;
     }
     
-	public function getNativeType()
+    public function getNativeType()
     {
-    	return $this->_item->getNativeType() . '[]';
+        return $this->_item->getNativeType() . '[]';
     } 
 }

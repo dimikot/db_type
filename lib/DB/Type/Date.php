@@ -14,15 +14,15 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
 
     public function input($native)
     {
-    	if ($native === null) {
-    		return null;
-    	}
-    	return self::truncDate($native, $this->_trunc);
+        if ($native === null) {
+            return null;
+        }
+        return self::truncDate($native, $this->_trunc);
     }
 
     public function output($value)
     {
-    	if ($value === null) {
+        if ($value === null) {
             return null;
         }
         return self::truncDate($value, $this->_trunc);
@@ -30,16 +30,16 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
     
     public static function truncDate($date, $trunc)
     {
-    	if (preg_match('/^\d+$/s', $date)) {
-    		$date .= "-01-01";
-    	} else if (preg_match('/^\d+-[01]?\d$/s', $date)) {
+        if (preg_match('/^\d+$/s', $date)) {
+            $date .= "-01-01";
+        } else if (preg_match('/^\d+-[01]?\d$/s', $date)) {
             $date .= "-01";
-    	} else if (preg_match('/^\d+-[01]?\d-[0123]?\d$/s', $date)) {
-    		// ok
-    	} else {
-    		throw new DB_Type_Exception_Date(new self($trunc), $date);
-    	}
-    	$parts = explode("-", $date);
+        } else if (preg_match('/^\d+-[01]?\d-[0123]?\d$/s', $date)) {
+            // ok
+        } else {
+            throw new DB_Type_Exception_Date(new self($trunc), $date);
+        }
+        $parts = explode("-", $date);
         if ($trunc > self::TRUNC_DAY) $parts[2] = 1;
         if ($trunc > self::TRUNC_MONTH) $parts[1] = 1;
         if ($parts[0] >= 0 && $parts[0] < 70) $parts[0] += 2000;
@@ -48,9 +48,9 @@ class DB_Type_Date extends DB_Type_Abstract_Primitive
         $parts[2] = str_pad($parts[2], 2, '0', STR_PAD_LEFT);
         return join("-", $parts);
     }
-	
+    
     public function getNativeType()
     {
-    	return 'DATE';
+        return 'DATE';
     }
 }

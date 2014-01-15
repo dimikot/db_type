@@ -3,38 +3,38 @@ class DB_Type_Pgsql_Test_ArrayTest extends DB_Type_Test_Util_TypeTestCase
 {
     protected function _getPairsInput()
     {
-    	return array_merge(
+        return array_merge(
             array(
-		        array(
-	                new DB_Type_Pgsql_Array(new DB_Type_String()),
-		            array("1", "2", "3", "4"),
-		            '{"1",  "2"  ,  "3",  "4",,,   }',
-		            "VARCHAR[]",
-		        ),
-		        array(
-	                new DB_Type_Pgsql_Array(new DB_Type_String()),
-		            array("1", "2", "3", "44", null),
-		            '{"1",  "2"  ,  "3",  "44",NULL,,   }',
-		            "VARCHAR[]",
-		        ),
-		        array(
-	                new DB_Type_Pgsql_Array(new DB_Type_Pgsql_Array(new DB_Type_String())),	        
-		            array(array('1'), array(), array('zzz"3"'), array('4')),
-		            '{{"1"},  {}  ,  {zzz"3"},  {"4"},,,   }',
-		            "VARCHAR[][]",
-		        ),
-	            array(
-	                new DB_Type_Pgsql_Array(new DB_Type_String()),            
-	                null,
-	                null,
-	                "VARCHAR[]",
-	            ),
-	            array(
-	                new DB_Type_Pgsql_Array(new DB_Type_String()),            
-	                new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "'{'", ' aaa', 1),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_String()),
+                    array("1", "2", "3", "4"),
+                    '{"1",  "2"  ,  "3",  "4",,,   }',
+                    "VARCHAR[]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_String()),
+                    array("1", "2", "3", "44", null),
+                    '{"1",  "2"  ,  "3",  "44",NULL,,   }',
+                    "VARCHAR[]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_Pgsql_Array(new DB_Type_String())),         
+                    array(array('1'), array(), array('zzz"3"'), array('4')),
+                    '{{"1"},  {}  ,  {zzz"3"},  {"4"},,,   }',
+                    "VARCHAR[][]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_String()),            
+                    null,
+                    null,
+                    "VARCHAR[]",
+                ),
+                array(
+                    new DB_Type_Pgsql_Array(new DB_Type_String()),            
+                    new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "'{'", ' aaa', 1),
                     ' aaa',
-	                "VARCHAR[]",
-	            ),
+                    "VARCHAR[]",
+                ),
                 array(
                     new DB_Type_Pgsql_Array(new DB_Type_String()),            
                     new DB_Type_Exception_Common(new DB_Type_Pgsql_Array(new DB_Type_String()), "input", "scalar value", '{{aa}}', 1),
@@ -90,25 +90,25 @@ class DB_Type_Pgsql_Test_ArrayTest extends DB_Type_Test_Util_TypeTestCase
 
     protected function _getPairsOutput()
     {
-    	return array(
-	        array(
+        return array(
+            array(
                 new DB_Type_Pgsql_Array(new DB_Type_String()),
-	            array("1", "2", "3", "4"),
-	            '{"1","2","3","4"}',
-	            "VARCHAR[]",
-	        ),
+                array("1", "2", "3", "4"),
+                '{"1","2","3","4"}',
+                "VARCHAR[]",
+            ),
             array(
                 new DB_Type_Pgsql_Array(new DB_Type_Pgsql_Array(new DB_Type_String())),
                 array(array("1", "2", "3", "4")),
                 '{{"1","2","3","4"}}',
                 "VARCHAR[][]",
             ),
-	        array(
+            array(
                 new DB_Type_Pgsql_Array(new DB_Type_String()),
-	            array('aa"bb', 'vv\\nn"dd"\nxx'),
-	            '{"aa\\"bb","vv\\\\nn\\"dd\\"\\\\nxx"}', // quoted, because 1d
-	            "VARCHAR[]",
-	        ),
+                array('aa"bb', 'vv\\nn"dd"\nxx'),
+                '{"aa\\"bb","vv\\\\nn\\"dd\\"\\\\nxx"}', // quoted, because 1d
+                "VARCHAR[]",
+            ),
             array(
                 new DB_Type_Pgsql_Array(new DB_Type_String()),            
                 array(),

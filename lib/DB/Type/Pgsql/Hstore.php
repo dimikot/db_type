@@ -2,8 +2,8 @@
 
 class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container 
 {
-	const ESCAPE = '"\\';
-	
+    const ESCAPE = '"\\';
+    
     public function output($value)
     {
         if (is_null($value)) {
@@ -24,25 +24,12 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
 
     protected function _parseInput($str, &$p) 
     {
-        // Leading spaces.
-        $c = $this->_charAfterSpaces($str, $p);
-        if ($c === false) {
-        	// Empty array().
-        	return array();
-        }
-        
+        $result = array();
         while (1) {
+            // End of string?
             $c = $this->_charAfterSpaces($str, $p);
-            
-            // End of string.
             if ($c === false) {
                 break;
-            }
-            
-            // Next element.
-            if ($c == ',') {
-                $p++;
-                continue;
             }
             
             // Key.
@@ -63,6 +50,15 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
             } else {
                 $result[$key] = $this->_item->input($value);
             }
+
+            // Next element.
+            $c = $this->_charAfterSpaces($str, $p);
+            if ($c == ',') {
+                $p++;
+                continue;
+            } else {
+                break;
+            }
         }
         
         return $result;
@@ -70,8 +66,8 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
     
     private function _readString($str, &$p)
     {
-    	$c = call_user_func(self::$_substr, $str, $p, 1);
-    	
+        $c = call_user_func(self::$_substr, $str, $p, 1);
+        
         // Unquoted string.
         if ($c != '"') {
             $len = strcspn($str, " \r\n\t,=>", $p);
@@ -92,8 +88,8 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
         throw new DB_Type_Exception_Common($this, "input", "quoted or unquoted string", $str, $p);
     }
     
-	public function getNativeType()
+    public function getNativeType()
     {
-    	return 'hstore';
+        return 'hstore';
     }    
 }

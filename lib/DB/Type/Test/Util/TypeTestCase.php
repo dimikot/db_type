@@ -2,15 +2,15 @@
 
 abstract class DB_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * Return test pairs in form of:
-	 * array($type, $input, $expectedOutput)
-	 *
-	 * @return array
-	 */
+    /**
+     * Return test pairs in form of:
+     * array($type, $input, $expectedOutput)
+     *
+     * @return array
+     */
     protected function _getPairsInput()
     {
-    	return array();
+        return array();
     }
 
     /**
@@ -60,30 +60,30 @@ abstract class DB_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_TestCase
     public function testOutput()
     {
         foreach ($this->_getPairsOutput() as $i => $pair) {
-        	if ($pair[1] instanceof Exception) {
-        		continue;
-        	}
-        	if ($pair[2] instanceof Exception) {
+            if ($pair[1] instanceof Exception) {
+                continue;
+            }
+            if ($pair[2] instanceof Exception) {
                 try {
                     $pair[0]->output($pair[1]);
                 } catch (Exception $e) {
-                	$this->assertEquals($pair[2]->getMessage(), $e->getMessage(), "pair #$i: {$pair[2]}");
+                    $this->assertEquals($pair[2]->getMessage(), $e->getMessage(), "pair #$i: {$pair[2]}");
                     continue;
                 }
                 $this->fail("pair #$i: Expected exception: " . get_class($pair[2]) . ':' . $pair[2]->getMessage());
-        	} else {
-	            $this->assertSame(
-	                $pair[2],
-	                $pair[0]->output($pair[1]),
+            } else {
+                $this->assertSame(
+                    $pair[2],
+                    $pair[0]->output($pair[1]),
                     "pair #$i: {$pair[2]}"
-	            );
-	            if (!isset($pair[3])) continue;
-	            $this->assertSame(
-	            	$pair[3],
-	            	$pair[0]->getNativeType(),
-	            	"pair #$i: {$pair[3]}"
-	            );
-        	}
+                );
+                if (!isset($pair[3])) continue;
+                $this->assertSame(
+                    $pair[3],
+                    $pair[0]->getNativeType(),
+                    "pair #$i: {$pair[3]}"
+                );
+            }
         }
     }
 
@@ -91,7 +91,7 @@ abstract class DB_Type_Test_Util_TypeTestCase extends PHPUnit_Framework_TestCase
     {
         foreach ($this->_getPairsOutput() as $i => $pair) {
             if ($pair[1] instanceof Exception || $pair[2] instanceof Exception) {
-            	continue;
+                continue;
             }
             $this->assertSame(
                 $pair[2],

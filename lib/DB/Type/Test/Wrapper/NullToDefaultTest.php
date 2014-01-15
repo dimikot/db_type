@@ -6,7 +6,7 @@ class DB_Type_Test_Wrapper_NullToDefaultTest extends DB_Type_Test_Util_TypeTestC
         return array(
             array(
                 new DB_Type_Wrapper_NullToDefault(
-                	'abc',
+                    'abc',
                     new DB_Type_String()
                 ),
                 null,
@@ -15,7 +15,7 @@ class DB_Type_Test_Wrapper_NullToDefaultTest extends DB_Type_Test_Util_TypeTestC
             ),
             array(
                 new DB_Type_Wrapper_NullToDefault(
-                	'10:01:01',
+                    '10:01:01',
                     new DB_Type_Time()
                 ),
                 null,
@@ -24,7 +24,7 @@ class DB_Type_Test_Wrapper_NullToDefaultTest extends DB_Type_Test_Util_TypeTestC
             ),
             array(
                 new DB_Type_Wrapper_NullToDefault(
-                	true,
+                    true,
                     new DB_Type_Pgsql_Boolean()
                 ),
                 null,
@@ -33,7 +33,7 @@ class DB_Type_Test_Wrapper_NullToDefaultTest extends DB_Type_Test_Util_TypeTestC
             ),
             array(
                 new DB_Type_Wrapper_NullToDefault(
-                	true,
+                    true,
                     new DB_Type_Pgsql_Boolean()
                 ),
                 false,

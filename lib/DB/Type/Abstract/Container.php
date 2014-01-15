@@ -32,21 +32,21 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
         }
     }
 
-	/**
-	 * Move $p to skip spaces from position $p of the string.
-	 * Return next non-space character at position $p or
-	 * false at the string end.
-	 *
-	 * @param string $str
-	 * @param int $p
-	 * @return string
-	 */
-	protected function _charAfterSpaces($str, &$p)
-	{
+    /**
+     * Move $p to skip spaces from position $p of the string.
+     * Return next non-space character at position $p or
+     * false at the string end.
+     *
+     * @param string $str
+     * @param int $p
+     * @return string
+     */
+    protected function _charAfterSpaces($str, &$p)
+    {
         $p += strspn($str, " \t\r\n", $p);
         return call_user_func(self::$_substr, $str, $p, 1);
-	}
-	
+    }
+    
     /**
      * Parse a native value into PHP variable.
      * Throws exception if parsing process is finished
@@ -55,14 +55,14 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
      * @param string $native
      * @return mixed
      */
-    public function input($native)
+    public function input($native, $ignoreInputTail = false)
     {
-    	if ($native === null) {
-    		return null;
-    	}
+        if ($native === null) {
+            return null;
+        }
         $pos = 0;
         $value = $this->_parseInput($native, $pos);
-        if ($pos != call_user_func(self::$_strlen, $native)) {
+        if (!$ignoreInputTail && $pos != call_user_func(self::$_strlen, $native)) {
             throw new DB_Type_Exception_Common($this, "input", "end of string", $native, $pos);
         }
         return $value;
