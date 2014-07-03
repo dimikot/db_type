@@ -4,6 +4,11 @@ class DB_Type_Pgsql_Hstore extends DB_Type_Abstract_Container
 {
     const ESCAPE = '"\\';
     
+    public function __construct(DB_Type_Abstract_Base $item = null)
+    {
+        parent::__construct($item? $item : new DB_Type_String());
+    }
+    
     public function output($value)
     {
         if (is_null($value)) {
