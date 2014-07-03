@@ -14,22 +14,17 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
     public function __construct(DB_Type_Abstract_Base $item = null)
     {
         $this->_item = $item;
-        $this->_init();
     }
 
     /**
-     * Inits some functions.
+     * Inits some constants.
      *
+     * @return void
      */
-    protected function _init()
+    public static function _init()
     {
-        if (!self::$_substr) {
-            self::$_substr = function_exists('mb_orig_substr')? 'mb_orig_substr' : 'substr';
-        }
-
-        if (!self::$_strlen) {
-            self::$_strlen = function_exists('mb_orig_strlen')? 'mb_orig_strlen' : 'strlen';
-        }
+        self::$_substr = function_exists('mb_orig_substr')? 'mb_orig_substr' : 'substr';
+        self::$_strlen = function_exists('mb_orig_strlen')? 'mb_orig_strlen' : 'strlen';
     }
 
     /**
@@ -53,7 +48,9 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
      * before the string is ended.
      *
      * @param string $native
+     * @param bool $ignoreInputTail
      * @return mixed
+     * @throws DB_Type_Exception_Common
      */
     public function input($native, $ignoreInputTail = false)
     {
@@ -80,3 +77,8 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
      */
     abstract protected function _parseInput($native, &$pos);
 }
+
+// We initialize static constants here, because we want it to be
+// done only once (e.g. for a case when we store pre-created
+// DB_Type objects in APC cache via apc_store()).
+DB_Type_Abstract_Container::_init();
