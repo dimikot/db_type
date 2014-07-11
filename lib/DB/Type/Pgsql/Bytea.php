@@ -1,17 +1,12 @@
 <?php
 class DB_Type_Pgsql_Bytea extends DB_Type_Abstract_Primitive
 {
-    private $_useOctFormat;
+    private $_forceHexFormat = false;
 
-    public function __construct($useOctFormat = null)
+    public function __construct($forceHexFormat = false)
     {
-        if ($useOctFormat === null) {
-            // Escaping format: aa -> aa, <0><1> -> \000\001 OR \\000\\001
-            // Hex format: aa -> \x6161, <0><1> -> \x0001 OR \\x0001
-            $this->_useOctFormat = pg_escape_bytea('a') == 'a';
-        } else {
-            $this->_useOctFormat = $useOctFormat;
-        }
+        // This flag is mostly for unit tests, you may never use it.
+        $this->_forceHexFormat = $forceHexFormat;
     }
 
     public function output($value)
@@ -19,27 +14,29 @@ class DB_Type_Pgsql_Bytea extends DB_Type_Abstract_Primitive
         if ($value === null) {
             return null;
         }
-        if ($this->_useOctFormat) {
+        if ($this->_forceHexFormat) {
+            return '\x' . current(unpack("H*", $value));
+        } else {
             // Note that pg_escape_bytea($value) === pg_escape_string($this->output($value)),
             // so, to calculate output(), we have to unescape pg_escape_bytea() result.
             // See http://www.postgresql.org/docs/9.0/static/datatype-binary.html
-            // The result of output() must be:
+            // The result of output() in Oct format must be:
             //   * chr(92) - backslash -> \\ (doubled)
             //   * 0 to 31 and 127 to  255 - \123 (slash + octal code)
             //   * others (including apostrophe) - remained as is
+            // In Hex format:
+            //   * \x012345...
             // If this result is fed to pg_escape_string(), we'll get pg_escape_bytea().
-            $slash = chr(92);
+            $s = chr(92); // backslash
             $escaped = pg_escape_bytea($value);
-            if (pg_escape_bytea($slash) == $slash . $slash . $slash . $slash) {
+            if (in_array(pg_escape_bytea($s), array("{$s}{$s}{$s}{$s}", "{$s}{$s}x" . dechex(ord($s))))) {
                 // Seems standard_conforming_strings = false, slashes and apostrophes are
                 // doubled (so pg_escape_bytea(SLASH) returns FOUR SLASHes in this mode!).
                 // So we unescape double slashes.
-                $escaped = str_replace($slash . $slash, $slash, $escaped);
+                $escaped = str_replace("{$s}{$s}", $s, $escaped);
             }
             // Apostrophes are always doubled, see PostgreSQL's PQescapeByteaInternal().
             return str_replace("''", "'", $escaped);
-        } else {
-            return '\x' . current(unpack("H*", $value));
         }
     }
 
