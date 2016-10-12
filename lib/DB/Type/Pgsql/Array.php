@@ -41,7 +41,7 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
             if ($e === false) {
                 throw new DB_Type_Exception_Common($this, "input", "balanced quoted or unquoted string or sub-array", $str, $p);
             }
-            $inner = substr($str, $p, $e - $p);
+            $inner = call_user_func(self::$_substr, $str, $p, $e - $p);
             $p = $e + 1;
             if (!preg_match_all('/([\d.]+|null)/is', $inner, $m)) return array();
             foreach ($m[0] as $v) {
@@ -85,8 +85,8 @@ class DB_Type_Pgsql_Array extends DB_Type_Abstract_Container
             	if (!strcasecmp($v, "null")) {
             		$result[] = null;
             	} else {
-                    $result[] = $this->_item->input($v, $for);
-            	}
+					$result[] = $this->_item->input($v, $for);
+				}
             	$p += $len;
                 continue;
             }

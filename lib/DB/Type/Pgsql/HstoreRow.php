@@ -55,7 +55,7 @@ class DB_Type_Pgsql_HstoreRow extends DB_Type_Pgsql_Hstore
 		$result = array();
 
 		foreach ($native as $field => $value) {
-			if (key_exists($field, $this->_items))
+			if (array_key_exists($field, $this->_items))
 				$result[$field] = $this->_items[$field]->input($value, $for);
 			/*else
 				$result[$field] = $value;*/

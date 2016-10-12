@@ -12,7 +12,7 @@ class DB_Type_Timestamp extends DB_Type_Abstract_Primitive
     const TRUNC_MONTH = 4;
     const TRUNC_YEAR = 5;
 
-    public function __construct($trunc = self::TRUNC_SECOND, $format = null, $timezone = null)
+    public function __construct($trunc = self::TRUNC_SECOND, $format = NULL, $timezone = NULL)
     {
         $this->_trunc = $trunc;
 		// todo add unit tests for this feature
@@ -22,14 +22,14 @@ class DB_Type_Timestamp extends DB_Type_Abstract_Primitive
 
     public function input($native, $for = '')
     {
-    	if ($native === null) {
-    		return null;
+    	if ($native === NULL) {
+    		return NULL;
     	}
 		if ($this->_format) {
 			if ($this->_timezone) $date = new DateTime($native, $this->_timezone);
 			else $date = new DateTime($native);
 
-			if ($date === false) return $native;
+			if ($date === FALSE) return $native;
 
 			return $date->format($this->_format);
 		}
@@ -38,8 +38,8 @@ class DB_Type_Timestamp extends DB_Type_Abstract_Primitive
 
     public function output($value)
     {
-    	if ($value === null) {
-            return null;
+    	if ($value === NULL) {
+            return NULL;
         }
 
 		/**
@@ -47,15 +47,15 @@ class DB_Type_Timestamp extends DB_Type_Abstract_Primitive
 		 */
 		if (is_array($value)) {
 			$value = DB_Type_Date::extractDate($value);
-		} elseif ($this->_format != null) {
+		} elseif ($this->_format != NULL) {
 			$value = DB_Type_Date::convertFromFormat($this->_format, $value, $this->_timezone);
 		}
 
-		$value = self::truncTimestamp($value, $this->_trunc);
+		$value = self::truncTimestamp($value->getTimestamp(), $this->_trunc);
         return date("r", $value);
     }
 
-    public static function truncTimestamp($timestamp, $trunc)
+	public static function truncTimestamp($timestamp, $trunc)
     {
         $parts = getdate($timestamp);
         if ($trunc > self::TRUNC_SECOND) $parts['seconds'] = 0;

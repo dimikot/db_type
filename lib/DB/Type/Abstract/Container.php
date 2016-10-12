@@ -23,14 +23,9 @@ abstract class DB_Type_Abstract_Container extends DB_Type_Abstract_Base
      */
     protected function _init()
     {
-        if (!self::$_substr) {
-            self::$_substr = function_exists('mb_orig_substr')? 'mb_orig_substr' : 'substr';
-        }
-
-        if (!self::$_strlen) {
-            self::$_strlen = function_exists('mb_orig_strlen')? 'mb_orig_strlen' : 'strlen';
-        }
-    }
+		self::$_substr = function_exists('mb_orig_substr') ? 'mb_orig_substr' : 'substr';
+		self::$_strlen = function_exists('mb_orig_strlen') ? 'mb_orig_strlen' : 'strlen';
+	}
 
 	/**
 	 * Move $p to skip spaces from position $p of the string.

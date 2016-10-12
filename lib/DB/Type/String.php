@@ -4,7 +4,7 @@ class DB_Type_String extends DB_Type_Abstract_Primitive
     private $_min;
     private $_max;
 
-    public function __construct($max = null, $min = null)
+    public function __construct($max = NULL, $min = NULL)
     {
         $this->_max = $max;
         $this->_min = $min;
@@ -12,17 +12,17 @@ class DB_Type_String extends DB_Type_Abstract_Primitive
 
 	public function output($value)
 	{
-        if ($value === null) {
-            return null;
+        if ($value === NULL) {
+            return NULL;
         }
 
 		$value = strval($value);
 
-		if ($this->_max !== null && strlen($value) > $this->_max) {
+		if ($this->_max !== NULL && mb_strlen($value, 'UTF-8') > $this->_max) {
             throw new DB_Type_Exception_Common($this, __FUNCTION__, 'String less than: ' . $this->_max, $value);
         }
 
-        if ($this->_min !== null && strlen($value) < $this->_min) {
+        if ($this->_min !== NULL && mb_strlen($value, 'UTF-8') < $this->_min) {
             throw new DB_Type_Exception_Common($this, __FUNCTION__, 'String more than: ' . $this->_max, $value);
         }
 
@@ -31,8 +31,8 @@ class DB_Type_String extends DB_Type_Abstract_Primitive
 
 	public function input($native, $for='')
 	{
-        if ($native === null) {
-            return null;
+        if ($native === NULL) {
+            return NULL;
         }
 		return strval($native);
 	}

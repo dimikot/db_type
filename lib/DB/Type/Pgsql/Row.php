@@ -2,26 +2,28 @@
 
 class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
 {
-	private $_items;
+	protected $_items;
 	private $_nativeType;
 
-	public function __construct(array $items, $nativeType = null)
+	public function __construct(array $items, $nativeType = NULL)
 	{
 		$this->_items = $items;
 		$this->_nativeType = $nativeType;
 		// ROW() has no base item type, so pass null to parent::__construct().
-		parent::__construct(null);
+		parent::__construct(NULL);
 	}
 
-	public function getItems()
+	public function getItems($itemName = NULL)
 	{
-		return $this->_items;
+		if ($itemName === NULL) return $this->_items;
+		elseif (array_key_exists($itemName, $this->_items)) return $this->_items[$itemName];
+		else return NULL;
 	}
 
     public function output($value)
     {
-        if ($value === null) {
-            return null;
+        if ($value === NULL) {
+            return NULL;
         }
 
         if (is_object($value)) {
@@ -35,11 +37,11 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
         $parts = array();
         foreach ($this->_items as $field => $type) {
             try {
-                $v = $type->output(isset($value[$field]) ? $value[$field] : null);
+                $v = $type->output(isset($value[$field]) ? $value[$field] : NULL);
             } catch (Exception $e) {
                 throw new DB_Type_Exception_Container($this, "output", $field, $e->getMessage());
             }
-            if ($v === null) {
+            if ($v === NULL) {
                 $parts[] = '';
             } else {
             	// ROW() doubles ["] and [\] characters: src\backend\adt\rowtypes.c
@@ -54,7 +56,7 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
     {
         reset($this->_items);
     	$result = array();
-    	$m = null;
+    	$m = NULL;
 
         // Leading "(".
         $c = $this->_charAfterSpaces($str, $p);
@@ -90,7 +92,8 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
             // Always read a next element value.
             if ($c == ',' || $c == ')') {
             	// Comma or end of row instead of value: treat as NULL.
-            	$result[$field] = null;
+            	//$result[$field] = NULL;
+				$result[$field] = $type->input(NULL, $for);
             } else if ($c != '"') {
                 // Unquoted string. NULL here is treated as "NULL" string, but NOT as a null value!
                	$len = strcspn($str, ",)", $p);
@@ -142,7 +145,7 @@ class DB_Type_Pgsql_Row extends DB_Type_Abstract_Container
 		$result = array();
 
 		foreach ( $native as $field => $value ) {
-			if ( key_exists($field, $this->_items) )
+			if (array_key_exists($field, $this->_items) )
 				$result[$field] = $this->_items[$field]->input($value, $for);
 			/*else
 				$result[$field] = $value;*/

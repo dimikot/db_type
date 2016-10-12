@@ -2,7 +2,7 @@
 
 class DB_Type_Pgsql_Enum extends DB_Type_Abstract_Primitive {
 
-	private $_items;
+	protected $_items;
 
 	function __construct(array $items)
 	{
@@ -15,7 +15,7 @@ class DB_Type_Pgsql_Enum extends DB_Type_Abstract_Primitive {
 		return $this->_items;
 	}
 
-	private function checkValue($value)
+	public function checkValue($value)
 	{
 		if ($value && !in_array($value, $this->_items))
 			throw new DB_Type_Exception_Enum($this, $value);
